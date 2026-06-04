@@ -52,11 +52,18 @@
     lastForwardedTrackName = track.name;
 
     const payload = {
-      trackName: track.name,
-      trackId: typeof track.id === 'string' ? track.id : null,
-      thumbnailURL: typeof track.thumbnailURL === 'string' ? track.thumbnailURL : null,
-      gameName: typeof track.gameName === 'string' ? track.gameName : null,
-      gameId: typeof track.gameId === 'string' ? track.gameId : null,
+      game: {
+        gameName: typeof track.gameName === 'string' ? track.gameName : null,
+        gameId: typeof track.gameId === 'string' ? track.gameId : null,
+        gameImage: typeof track.gameImage === 'string' ? track.gameImage : null,
+        formalHardware: typeof track.formalHardware === 'string' ? track.formalHardware : null,
+      },
+      track: {
+        trackName: track.name,
+        trackId: typeof track.id === 'string' ? track.id : null,
+        thumbnailURL: typeof track.thumbnailURL === 'string' ? track.thumbnailURL : null,
+        rightNotation: typeof track.rightNotation === 'string' ? track.rightNotation : null,
+      },
       currentTime: typeof track.currentTime === 'number' ? track.currentTime : null,
       duration: typeof track.duration === 'number' ? track.duration : null,
       paused: typeof track.paused === 'boolean' ? track.paused : null,

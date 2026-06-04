@@ -58,6 +58,10 @@
       : first.playlist?.name ?? null;
 
     const gameId = first.game?.id ?? null;
+    const gameImage = first.game?.thumbnailURL ?? null;
+
+    const rightNotation = typeof first.rightNotation === 'string' ? first.rightNotation : null;
+    const formalHardware = first.game?.formalHardware ?? null
 
     return {
       name: first.name,
@@ -65,6 +69,9 @@
       thumbnailURL,
       gameName,
       gameId,
+      rightNotation,
+      gameImage,
+      formalHardware,
     };
   }
 

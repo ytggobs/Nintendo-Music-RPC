@@ -8,11 +8,13 @@ const truncate = (text: string, max = 15): string =>
  * @returns A DiscordActivity object representing the track.
  */
 export function buildActivity(track: Track): DiscordActivity {
-  const gameName = track.gameName || 'Nintendo Music';
+  const gameName = track.game.gameName || 'Nintendo Music';
+  const notation = track.track.rightNotation ? track.track.rightNotation.replace('©', '').trim() : null;
 
   const activity: DiscordActivity = {
-    details: track.name,
-    state: track.paused ? `From ${gameName} · ⏸ Paused` : `From ${gameName}`,
+    name: `Nintendo Music - ${truncate(track.track.name)}`,
+    details: track.track.name,
+    state: notation ? `${notation} · ${gameName}` : `From ${gameName}`,
     type: 2,
     instance: false,
   };
@@ -30,25 +32,34 @@ export function buildActivity(track: Track): DiscordActivity {
     };
   }
 
-  if (track.thumbnailURL) {
+  if (track.track.thumbnailURL) {
     activity.assets = {
-      large_image: track.thumbnailURL,
-      large_text: track.name,
+      large_image: track.track.thumbnailURL,
+      large_text: track.paused ? `${gameName} · ⏸ Paused` : `${gameName}`,
+    };
+  }
+
+  if (track.game.gameImage) {
+    activity.assets = {
+      large_image: activity.assets?.large_image || '',
+      large_text: activity.assets?.large_text || '',
+      small_image: track.game.gameImage,
+      small_text: gameName,
     };
   }
 
   const buttons: DiscordActivityButton[] = [];
 
-  if (track.id) {
+  if (track.track.id) {
     buttons.push({
       label: 'Play on Nintendo Music',
       url: Track.trackURL(track) || 'https://music.nintendo.com',
     });
   }
 
-  if (track.gameId && track.gameName) {
+  if (track.game.gameId && track.game.gameName) {
     buttons.push({
-      label: `View ${truncate(track.gameName)} on Nintendo Music`,
+      label: `View ${truncate(track.game.gameName)} on Nintendo Music`,
       url: Track.gameURL(track) || 'https://music.nintendo.com',
     });
   }

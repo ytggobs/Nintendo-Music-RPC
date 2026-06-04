@@ -1,10 +1,17 @@
 /** A track as tracked internally by the bridge. */
 export interface Track {
-  name: string;
-  id: string | null;
-  thumbnailURL: string | null;
-  gameName: string | null;
-  gameId: string | null;
+  track: {
+    name: string;
+    id: string | null;
+    thumbnailURL: string | null;
+    rightNotation: string | null;
+  };
+  game: {
+    gameName: string | null;
+    gameId: string | null;
+    gameImage: string | null;
+    formalHardware: string | null;
+  };
   currentTime: number | null;
   duration: number | null;
   paused: boolean | null;
@@ -13,21 +20,28 @@ export interface Track {
 
 export namespace Track {
   export function trackURL(track: Track): string | null {
-    return track.id ? `https://music.nintendo.com/shared/en-US/NZ/tracks/${track.id}/` : null;
+    return track.track.id ? `https://music.nintendo.com/shared/en-US/NZ/tracks/${track.track.id}/` : null;
   }
 
   export function gameURL(track: Track): string | null {
-    return track.gameId ? `https://music.nintendo.com/en-US/game/${track.gameId}/` : null;
+    return track.game.gameId ? `https://music.nintendo.com/en-US/game/${track.game.gameId}/` : null;
   }
 }
 
 /** The raw payload posted to the bridge by the browser extension. */
 export interface TrackPayload {
-  trackName?: string;
-  trackId?: string | null;
-  thumbnailURL?: string | null;
-  gameName?: string | null;
-  gameId?: string | null;
+  track: {
+    trackName?: string;
+    trackId?: string | null;
+    thumbnailURL?: string | null;
+    rightNotation?: string | null;
+  },
+  game: {
+    gameName?: string | null;
+    gameId?: string | null;
+    gameImage?: string | null;
+    formalHardware?: string | null;
+  },
   currentTime?: number | null;
   duration?: number | null;
   paused?: boolean | null;
@@ -43,6 +57,8 @@ export interface DiscordActivityButton {
 export interface DiscordActivityAssets {
   large_image: string;
   large_text: string;
+  small_image?: string;
+  small_text?: string;
 }
 
 /** Timestamps for a Discord Rich Presence activity. */
@@ -53,6 +69,7 @@ export interface DiscordActivityTimestamps {
 
 /** A Discord Rich Presence activity object. */
 export interface DiscordActivity {
+  name?: string;
   details?: string;
   state?: string;
   type?: number;

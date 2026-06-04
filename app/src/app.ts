@@ -74,8 +74,8 @@ export class RichPresenceApp {
     this.discord = new DiscordIpc(CLIENT_ID, {
       onReady: () => {
         this.tray.update();
-        if (this.currentTrack?.name) {
-          log('Replaying current track after Discord ready.', this.currentTrack.name);
+        if (this.currentTrack?.track.name) {
+          log('Replaying current track after Discord ready.', this.currentTrack.track.name);
           this.updateActivity();
         }
       },
@@ -90,17 +90,24 @@ export class RichPresenceApp {
   }
 
   private handleTrackUpdate(payload: TrackPayload): void {
-    if (!payload.trackName) {
+    if (!payload.track.trackName) {
       log('Ignoring payload with no trackName.');
       return;
     }
 
     this.currentTrack = {
-      name: payload.trackName,
-      id: payload.trackId || null,
-      thumbnailURL: payload.thumbnailURL || null,
-      gameName: payload.gameName || null,
-      gameId: payload.gameId || null,
+      track: {
+        name: payload.track.trackName,
+        id: payload.track.trackId || null,
+        thumbnailURL: payload.track.thumbnailURL || null,
+        rightNotation: payload.track.rightNotation || null,
+      },
+      game: {
+        gameName: payload.game.gameName || null,
+        gameId: payload.game.gameId || null,
+        gameImage: payload.game.gameImage || null,
+        formalHardware: payload.game.formalHardware || null,
+      },
       currentTime: typeof payload.currentTime === 'number' ? payload.currentTime : null,
       duration: typeof payload.duration === 'number' ? payload.duration : null,
       paused: typeof payload.paused === 'boolean' ? payload.paused : null,
@@ -108,7 +115,7 @@ export class RichPresenceApp {
     };
 
     log('Track updated.', {
-      trackName: payload.trackName,
+      trackName: payload.track.trackName,
       currentTime: payload.currentTime,
       duration: payload.duration,
       paused: payload.paused,
@@ -175,12 +182,12 @@ export class RichPresenceApp {
   private updateActivity(): void {
     const track = this.currentTrack;
 
-    if (!this.discord?.ready || !track?.name || !this.rpcEnabled || !this.tabConnected) {
+    if (!this.discord?.ready || !track?.track.name || !this.rpcEnabled || !this.tabConnected) {
       log('Skipping Discord activity update.', {
         rpcReady: this.discord?.ready ?? false,
         rpcEnabled: this.rpcEnabled,
         tabConnected: this.tabConnected,
-        trackName: track?.name,
+        trackName: track?.track.name,
       });
       return;
     }

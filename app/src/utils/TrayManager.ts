@@ -44,17 +44,17 @@ export class TrayManager {
     this.tray.setContextMenu(this.buildMenu());
 
     const track = this.options.getCurrentTrack();
-    this.tray.setToolTip(track?.name ? `Nintendo Music · ${track.name}` : 'Nintendo Music');
+    this.tray.setToolTip(track?.track.name ? `Nintendo Music · ${track.track.name}` : 'Nintendo Music');
   }
 
   private buildMenu(): Menu {
     const track = this.options.getCurrentTrack();
 
-    const trackLabel = track?.name
-      ? `${track.paused ? '⏸' : '▶'} ${track.name}`
+    const trackLabel = track?.track.name
+      ? `${track.paused ? '⏸' : '▶'} ${track.track.name}`
       : 'Not playing';
 
-    const gameLabel = track?.gameName ? `   ${track.gameName}` : null;
+    const gameLabel = track?.game.gameName ? `   ${track.game.gameName}` : null;
 
     const discordStatus = !this.options.clientIdConfigured
       ? 'Discord: not configured'

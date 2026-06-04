@@ -6,8 +6,8 @@ interface BridgeRendererState {
   rpcReady?: boolean;
   clientIdConfigured?: boolean;
   currentTrack?: {
-    name?: string;
-    gameName?: string | null;
+    track: { name: string };
+    game: { gameName: string | null };
     currentTime?: number | null;
     duration?: number | null;
     paused?: boolean | null;
@@ -56,13 +56,13 @@ const renderState = (state: BridgeRendererState | null | undefined): void => {
 
   const track = state.currentTrack;
 
-  if (trackNameEl && track?.name) {
-    trackNameEl.textContent = track.name;
+  if (trackNameEl && track?.track.name) {
+    trackNameEl.textContent = track.track.name;
     trackNameEl.classList.remove('empty');
   }
 
   if (gameNameEl) {
-    gameNameEl.textContent = track?.gameName || '';
+    gameNameEl.textContent = track?.game.gameName || '';
   }
 
   if (playbackEl) {
