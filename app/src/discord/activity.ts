@@ -1,20 +1,39 @@
-import { Track, DiscordActivity, DiscordActivityButton } from '../types';
+import { Track, DiscordActivity, DiscordActivityButton, SPLATOON_GAME_ID, SPLATOON_2_GAME_ID, SPLATOON_3_GAME_ID } from '../types';
+import { createLogger } from '../utils/logger';
+
+const { log } = createLogger('activity');
 
 const truncate = (text: string, max = 15): string =>
   text.length > max ? `${text.slice(0, max)}...` : text;
 
-/** Builds a Discord Rich Presence activity object from a Track.
- * @param track The track to build the activity from.
- * @returns A DiscordActivity object representing the track.
- */
-export function buildActivity(track: Track): DiscordActivity {
+export interface ActivityOptions {
+  splatoonDetailedRpc: boolean;
+}
+
+export function buildActivity(track: Track, opts: ActivityOptions): DiscordActivity {
   const gameName = track.game.gameName || 'Nintendo Music';
   const notation = track.track.rightNotation ? track.track.rightNotation.replace('©', '').trim() : null;
+  const isSplatoon = [SPLATOON_GAME_ID, SPLATOON_2_GAME_ID, SPLATOON_3_GAME_ID].includes(track.game.gameId || '');
+
+  let details: string;
+  let state: string;
+
+  if (isSplatoon && opts.splatoonDetailedRpc) {
+    const title = track.track.name.split('/')[0].trim();
+    const artist = track.track.name.split('/')[1]?.trim() ?? '';
+    details = title;
+    state = `${artist} · ${gameName}`;
+    log('Using Splatoon detailed format.', { details, state });
+  } else {
+    details = track.track.name;
+    state = notation ? `${notation} · ${gameName}` : `From ${gameName}`;
+    log('Using standard format.', { details, state, isSplatoon });
+  }
 
   const activity: DiscordActivity = {
-    name: `Nintendo Music - ${truncate(track.track.name)}`,
-    details: track.track.name,
-    state: notation ? `${notation} · ${gameName}` : `From ${gameName}`,
+    name: `Nintendo Music - ${truncate(details)}`,
+    details: details,
+    state: state,
     type: 2,
     instance: false,
   };

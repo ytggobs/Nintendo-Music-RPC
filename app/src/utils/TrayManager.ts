@@ -13,6 +13,7 @@ export interface TrayOptions {
   isRpcReady: () => boolean;
   isRpcEnabled: () => boolean;
   onToggleRpc: () => void;
+  onOpenPreferences: () => void;
   onQuit: () => void;
 }
 
@@ -74,6 +75,11 @@ export class TrayManager {
         type: 'checkbox',
         checked: this.options.isRpcEnabled(),
         click: () => this.options.onToggleRpc(),
+      },
+      { type: 'separator' },
+      {
+        label: 'Preferences...',
+        click: () => this.options.onOpenPreferences(),
       },
       { type: 'separator' },
       {

@@ -8,7 +8,7 @@
   },
   "main": "app/dist/main.js",
   "scripts": {
-    "copy-assets": "node -e \"const fs=require('fs');fs.cpSync('app/assets','app/dist/assets',{recursive:true})\"",
+    "copy-assets": "node -e \"const fs=require('fs');fs.cpSync('app/assets','app/dist/assets',{recursive:true});fs.copyFileSync('app/preferences.html','app/dist/preferences.html')\"",
     "build": "tsc && npm run copy-assets",
     "watch": "tsc --watch",
     "start": "npm run build && electron .",
