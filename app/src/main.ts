@@ -1,4 +1,5 @@
-import { app, shell } from 'electron';
+import { app } from 'electron';
+import { autoUpdater } from 'electron-updater';
 import { createLogger } from './utils/logger';
 import { RichPresenceApp } from './app';
 import { createServer } from './httpServer/server';
@@ -26,8 +27,10 @@ app.whenReady().then(() => {
   setupAutoLaunch();
   presence.start();
 
-  // todo: determine if i wanna keep this, its lowkey annoying
-  shell.openExternal('https://music.nintendo.com');
+  // apple banned my bloody adp account so i cant sign, so auto update dont work.
+  if (process.platform !== 'darwin') {
+    autoUpdater.checkForUpdatesAndNotify().catch((err) => warn('Auto-update check failed.', err));
+  }
 });
 
 app.on('before-quit', () => presence.stop());

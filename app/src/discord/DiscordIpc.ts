@@ -51,7 +51,7 @@ export class DiscordIpc {
         socket.write(encodePacket(OP.HANDSHAKE, { v: 1, client_id: this.clientId }));
       });
 
-      socket.on('data', (chunk) => {
+      socket.on('data', (chunk: Buffer) => {
         this.buffer = Buffer.concat([this.buffer, chunk]);
 
         while (this.buffer.length >= 8) {
