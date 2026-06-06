@@ -72,6 +72,12 @@ export class DiscordIpc {
             log('Discord IPC ready.');
             this.events.onReady?.();
             resolve();
+          } else if (packet.op === OP.FRAME && packet.data?.cmd === 'SET_ACTIVITY') {
+            // SET_ACTIVITY ACK — expected, nothing to do
+          } else if (packet.op === OP.CLOSE) {
+            log('Discord IPC close packet received.', packet.data);
+          } else {
+            warn('Unhandled Discord IPC packet.', packet);
           }
         }
       });

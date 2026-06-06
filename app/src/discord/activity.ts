@@ -52,14 +52,14 @@ export function buildActivity(track: Track): DiscordActivity {
 
   if (track.track.id) {
     buttons.push({
-      label: 'Play on Nintendo Music',
+      label: 'Listen on Nintendo Music',
       url: Track.trackURL(track) || 'https://music.nintendo.com',
     });
   }
 
   if (track.game.gameId && track.game.gameName) {
     buttons.push({
-      label: `View ${truncate(track.game.gameName)} on Nintendo Music`,
+      label: `${truncate(track.game.gameName, 11)} on Nintendo Music`,
       url: Track.gameURL(track) || 'https://music.nintendo.com',
     });
   }
