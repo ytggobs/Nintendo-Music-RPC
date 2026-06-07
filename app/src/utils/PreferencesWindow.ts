@@ -1,3 +1,4 @@
+import { app } from 'electron';
 import path from 'node:path';
 import fs from 'node:fs';
 import { BrowserWindow } from 'electron';
@@ -45,7 +46,9 @@ export class PreferencesWindow {
     });
 
     void this.win.loadFile(htmlPath);
-    this.win.webContents.openDevTools({ mode: 'detach' });
+    if (!app.isPackaged) {
+      this.win.webContents.openDevTools({ mode: 'detach' });
+    }
     this.win.once('ready-to-show', () => {
       this.win?.show();
       this.win?.focus();
