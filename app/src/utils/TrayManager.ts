@@ -13,6 +13,7 @@ export interface TrayOptions {
   isRpcReady: () => boolean;
   isRpcEnabled: () => boolean;
   onToggleRpc: () => void;
+  onOpenPreferences: () => void;
   onQuit: () => void;
 }
 
@@ -77,16 +78,21 @@ export class TrayManager {
       },
       { type: 'separator' },
       {
+        label: 'Preferences...',
+        click: () => this.options.onOpenPreferences(),
+      },
+      { type: 'separator' },
+      {
         label: 'Open Nintendo Music',
         click: () => shell.openExternal('https://music.nintendo.com'),
       },
-      {
-        label: 'Download Firefox Extension',
-        click: () =>
-          shell.openExternal(
-            'https://example.com',
-          ),
-      },
+      // {
+      //   label: 'Download Firefox Extension',
+      //   click: () =>
+      //     shell.openExternal(
+      //       'https://example.com',
+      //     ),
+      // },
       {
         label: 'Download Chrome Extension',
         click: () =>

@@ -87,3 +87,7 @@ export interface BridgeState {
   clientIdConfigured: boolean;
   currentTrack: Track | null;
 }
+
+export const SPLATOON_GAME_ID = '6338c15d-3f36-47f0-aa47-e46d69ff50f5';
+export const SPLATOON_2_GAME_ID = 'f3a39d36-519f-4839-87d3-ec70c0298b6a';
+export const SPLATOON_3_GAME_ID = '5bd86aee-7a21-4aac-a894-bb3f98d0cc91';

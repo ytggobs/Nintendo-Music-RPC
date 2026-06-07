@@ -1,10 +1,13 @@
 import type { Server } from 'node:http';
-import { app } from 'electron';
+import { app, ipcMain } from 'electron';
 import { createLogger } from './utils/logger';
 import { CLIENT_ID, PORT } from './utils/config';
 import { DiscordIpc } from './discord/DiscordIpc';
 import { buildActivity } from './discord/activity';
 import { TrayManager } from './utils/TrayManager';
+import { PreferencesStore } from './utils/preferences';
+import type { Preferences } from './utils/preferences';
+import { PreferencesWindow } from './utils/PreferencesWindow';
 import { createBridgeServer } from './BridgerServer';
 import type { BridgeState, Track, TrackPayload } from './types';
 
@@ -22,6 +25,8 @@ export class RichPresenceApp {
   private discord: DiscordIpc | null = null;
   private server: Server | null = null;
   private heartbeatTimer: NodeJS.Timeout | null = null;
+  private prefs: PreferencesStore | null = null;
+  private prefsWindow: PreferencesWindow | null = null;
   private readonly tray: TrayManager;
   private readonly subscribers = new Set<(track: Track | null) => void>();
 
@@ -32,6 +37,7 @@ export class RichPresenceApp {
       isRpcReady: () => this.discord?.ready ?? false,
       isRpcEnabled: () => this.rpcEnabled,
       onToggleRpc: () => this.toggleRpc(),
+      onOpenPreferences: () => this.prefsWindow?.open(),
       onQuit: () => this.quit(),
     });
   }
@@ -43,6 +49,24 @@ export class RichPresenceApp {
       clientIdConfigured: Boolean(CLIENT_ID),
       nodeVersion: process.version,
       platform: process.platform,
+    });
+
+    this.prefs = new PreferencesStore();
+    this.prefsWindow = new PreferencesWindow();
+
+    ipcMain.handle('prefs:get', () => {
+      const all = this.prefs!.getAll();
+      log('IPC prefs:get.', all);
+      return all;
+    });
+    ipcMain.on('prefs:set', (_event, key: string, value: unknown) => {
+      log('IPC prefs:set received.', { key, value });
+      this.prefs!.set(key as keyof Preferences, value as Preferences[keyof Preferences]);
+    });
+
+    this.prefs.onChange((updated) => {
+      this.prefsWindow?.sendUpdate(updated);
+      this.updateActivity();
     });
 
     this.tray.create();
@@ -192,7 +216,9 @@ export class RichPresenceApp {
       return;
     }
 
-    this.discord.setActivity(buildActivity(track));
+    const opts = this.prefs?.getAll() ?? { splatoonDetailedRpc: true };
+    log('Updating Discord activity.', { track: track.track.name, opts });
+    this.discord.setActivity(buildActivity(track, opts));
   }
 
   subscribe(callback: (track: Track | null) => void): () => void {
