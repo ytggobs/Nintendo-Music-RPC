@@ -7,10 +7,12 @@ const { log, warn } = createLogger('preferences');
 
 export interface Preferences {
   splatoonDetailedRpc: boolean;
+  swapRpcImages: boolean;
 }
 
 const DEFAULTS: Preferences = {
   splatoonDetailedRpc: true,
+  swapRpcImages: false,
 };
 
 export class PreferencesStore {

@@ -8,6 +8,7 @@ const truncate = (text: string, max = 15): string =>
 
 export interface ActivityOptions {
   splatoonDetailedRpc: boolean;
+  swapRpcImages: boolean;
 }
 
 export function buildActivity(track: Track, opts: ActivityOptions): DiscordActivity {
@@ -59,11 +60,15 @@ export function buildActivity(track: Track, opts: ActivityOptions): DiscordActiv
   }
 
   if (track.game.gameImage) {
+    const largeImage = opts.swapRpcImages ? track.game.gameImage : track.track.thumbnailURL || track.game.gameImage;
+    const largeText = opts.swapRpcImages ? `${gameName}` : track.paused ? `${gameName} · ⏸ Paused` : `${gameName}`;
+    const smallImage = opts.swapRpcImages ? track.track.thumbnailURL || track.game.gameImage : track.game.gameImage;
+    const smallText = opts.swapRpcImages ? track.paused ? `${gameName} · ⏸ Paused` : `${gameName}` : `${gameName}`;
     activity.assets = {
-      large_image: activity.assets?.large_image || '',
-      large_text: activity.assets?.large_text || '',
-      small_image: track.game.gameImage,
-      small_text: gameName,
+      large_image: largeImage,
+      large_text: largeText,
+      small_image: smallImage,
+      small_text: smallText,
     };
   }
 

@@ -216,7 +216,7 @@ export class RichPresenceApp {
       return;
     }
 
-    const opts = this.prefs?.getAll() ?? { splatoonDetailedRpc: true };
+    const opts = this.prefs?.getAll() ?? { splatoonDetailedRpc: true, swapRpcImages: false };
     log('Updating Discord activity.', { track: track.track.name, opts });
     this.discord.setActivity(buildActivity(track, opts));
   }

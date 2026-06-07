@@ -119,7 +119,6 @@
     <div class="container">
       <h1>Preferences</h1>
       <div class="card">
-
         <div class="setting-row">
           <div class="setting-info">
             <label for="splatoon-detail">Splatoon detailed RPC</label>
@@ -131,6 +130,19 @@
           </label>
         </div>
       </div>
+
+      <div class="card" style="margin-top: 16px">
+        <div class="setting-row">
+          <div class="setting-info">
+            <label for="swap-rpc-images">Swap RPC images</label>
+            <p>Swaps the large and small images in the Discord Rich Presence</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="swap-rpc-images" />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -138,6 +150,7 @@
       const prefsApi = window.prefs;
 
       const splatoonDetailEl = document.getElementById('splatoon-detail');
+      const swapRpcImagesEl = document.getElementById('swap-rpc-images');
 
       function render(data) {
         splatoonDetailEl.checked = data.splatoonDetailedRpc;
@@ -148,6 +161,10 @@
 
       splatoonDetailEl.addEventListener('change', () => {
         prefsApi.set('splatoonDetailedRpc', splatoonDetailEl.checked);
+      });
+
+      swapRpcImagesEl.addEventListener('change', () => {
+        prefsApi.set('swapRpcImages', swapRpcImagesEl.checked);
       });
     </script>
   </body>
