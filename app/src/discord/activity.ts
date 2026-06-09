@@ -78,7 +78,7 @@ export function buildActivity(track: Track, opts: ActivityOptions): DiscordActiv
 
   if (track.game.gameId && track.game.gameName) {
     buttons.push({
-      label: `${truncate(track.game.gameName, 11)} on Nintendo Music`,
+      label: 'Open Game Page',
       url: Track.gameURL(track) || 'https://music.nintendo.com',
     });
   }
