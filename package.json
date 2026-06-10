@@ -19,6 +19,12 @@
     "asarUnpack": ["**/preload-prefs.js", "**/preferences.html"],
     "productName": "Nintendo Music RPC",
     "copyright": "Copyright © 2026 Ben Lawrence",
+    "extraResources": [
+      {
+        "from": "app/dist/preferences.html",
+        "to": "app/dist/preferences.html"
+      }
+    ],
     "mac": {
       "identity": null,
       "icon": "app/assets/icon.icns",

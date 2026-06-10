@@ -17,7 +17,7 @@ export class PreferencesWindow {
     }
 
     const distBase = app.isPackaged
-      ? path.join(process.resourcesPath, 'app.asar.unpacked', 'app', 'dist')
+      ? path.join(process.resourcesPath, 'app', 'dist')
       : path.join(__dirname, '..');
     const preloadPath = path.join(distBase, 'preload-prefs.js');
     const htmlPath = path.join(distBase, 'preferences.html');
