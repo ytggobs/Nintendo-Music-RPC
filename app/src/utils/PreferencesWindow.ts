@@ -16,8 +16,11 @@ export class PreferencesWindow {
       return;
     }
 
-    const preloadPath = path.join(__dirname, '..', 'preload-prefs.js');
-    const htmlPath = path.join(__dirname, '..', 'preferences.html');
+    const distBase = app.isPackaged
+      ? path.join(process.resourcesPath, 'app', 'dist')
+      : path.join(__dirname, '..');
+    const preloadPath = path.join(distBase, 'preload-prefs.js');
+    const htmlPath = path.join(distBase, 'preferences.html');
 
     log('Opening preferences window.', {
       preloadPath,
@@ -45,7 +48,7 @@ export class PreferencesWindow {
       },
     });
 
-    void this.win.loadFile(htmlPath);
+    void this.win.loadURL(`file://${htmlPath}`);
     if (!app.isPackaged) {
       this.win.webContents.openDevTools({ mode: 'detach' });
     }
