@@ -18,6 +18,7 @@ function resolveImageUrl(source: RpcImageSource, track: Track): string | null {
     case RpcImageSource.Game: return track.game.gameImage;
     case RpcImageSource.Track: return track.track.thumbnailURL;
     case RpcImageSource.Playlist: return track.playlist?.playlistImageURL ?? track.track.thumbnailURL;
+    default: return null;
   }
 }
 
@@ -26,6 +27,7 @@ function resolveListeningStatusTag(source: ListeningStatusTag, track: Track): st
     case ListeningStatusTag.Game: return track.game.gameName;
     case ListeningStatusTag.Track: return track.track.name;
     case ListeningStatusTag.Playlist: return track.playlist?.playlistName ?? track.track.name;
+    default: return null;
   }
 }
 

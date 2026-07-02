@@ -17,7 +17,7 @@ const DEFAULTS: Preferences = {
   splatoonDetailedRpc: true,
   largeRpcImage: RpcImageSource.Track,
   smallRpcImage: RpcImageSource.Game,
-  listeningStatusTag: RpcImageSource.Track,
+  listeningStatusTag: ListeningStatusTag.Track,
 };
 
 export class PreferencesStore {

@@ -184,13 +184,22 @@ export class RichPresenceApp {
     try {
       const url = `https://api.m.nintendo.com/catalog/officialPlaylists/${playlistId}?country=NZ&lang=en-US`;
       const res = await fetch(url);
+
+      if (!res.ok) {
+        warn('Failed to fetch playlist data.', { playlistId, status: res.status, statusText: res.statusText });
+        return;
+      }
+
       const data = await res.json() as { thumbnailURL?: string; name?: string };
+	
+      const imageUrl = typeof data?.thumbnailURL === 'string' ? data.thumbnailURL : null;
+      const name = typeof data?.name === 'string' ? data.name : null;
+      if (!imageUrl || !name) {
+        warn('Playlist data missing thumbnailURL or name.', { playlistId, data });
+        return;
+      }
 
-      const imageUrl = data?.thumbnailURL ?? null;
-      const name = data?.name ?? null;
-      if (!imageUrl) return;
-
-      this.playlistCache.set(playlistId, { imageUrl, name: name ?? '' });
+      this.playlistCache.set(playlistId, { imageUrl, name });
       if (this.currentTrack?.playlist?.playlistId === playlistId) {
         this.currentTrack.playlist.playlistImageURL = imageUrl;
         this.currentTrack.playlist.playlistName = name;

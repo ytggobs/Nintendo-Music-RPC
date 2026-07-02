@@ -32,16 +32,18 @@
   function readCurrentTrack() {
     const rawTrackLog = window.localStorage.getItem(TRACK_LOG_KEY);
     const rawPlayQueue = window.localStorage.getItem(PLAY_QUEUE_KEY);
-    if (!rawTrackLog || !rawPlayQueue) {
-      log(`No ${TRACK_LOG_KEY} or ${PLAY_QUEUE_KEY} entry in localStorage yet.`);
+    if (!rawTrackLog) {
+      log(`No ${TRACK_LOG_KEY} entry in localStorage yet.`);
       return null;
     }
 
     let trackLogs;
-    let playQueue;
+    let playQueue = {};
     try {
       trackLogs = JSON.parse(rawTrackLog);
-      playQueue = JSON.parse(rawPlayQueue);
+      if (rawPlayQueue) {
+        playQueue = JSON.parse(rawPlayQueue);
+      }
     } catch {
       warn('Failed to parse track log or play queue from localStorage.', { rawTrackLog, rawPlayQueue });
       return null;

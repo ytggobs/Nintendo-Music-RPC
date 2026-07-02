@@ -18,13 +18,13 @@ export interface Track {
     id: string | null;
     thumbnailURL: string | null;
     rightNotation: string | null;
-  };
+  },
   game: {
     gameName: string | null;
     gameId: string | null;
     gameImage: string | null;
     formalHardware: string | null;
-  };
+  },
   currentTime: number | null;
   duration: number | null;
   paused: boolean | null;
