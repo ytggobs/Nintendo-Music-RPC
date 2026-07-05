@@ -10,7 +10,7 @@ import type { Preferences } from './utils/preferences';
 import { PreferencesWindow } from './utils/PreferencesWindow';
 import { createBridgeServer } from './BridgerServer';
 import type { BridgeState, Track, TrackPayload } from './types';
-import { RpcImageSource, SPECIAL_PLAYLIST_IDS, SPECIAL_PLAYLISTS } from './types';
+import { RpcImageSource, LabelPlacement, SPECIAL_PLAYLIST_IDS, SPECIAL_PLAYLISTS } from './types';
 
 const { log, warn } = createLogger('app');
 
@@ -276,7 +276,7 @@ export class RichPresenceApp {
       return;
     }
 
-    const opts = this.prefs?.getAll() ?? { splatoonDetailedRpc: true, largeRpcImage: RpcImageSource.Track, smallRpcImage: RpcImageSource.Game, listeningStatusTag: RpcImageSource.Track };
+    const opts = this.prefs?.getAll() ?? { splatoonDetailedRpc: true, largeRpcImage: RpcImageSource.Track, smallRpcImage: RpcImageSource.Game, listeningStatusTag: RpcImageSource.Track, statusLabelPlacement: LabelPlacement.Left };
     log('Updating Discord activity.', { track: track.track.name, opts });
     this.discord.setActivity(buildActivity(track, opts));
   }

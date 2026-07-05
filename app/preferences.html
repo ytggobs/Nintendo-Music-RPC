@@ -173,7 +173,6 @@
             <option value="playlist">Playlist</option>
           </select>
         </div>
-
         <div class="setting-row" style="border-top: 1px solid #f0f0f0">
           <div class="setting-info">
             <label for="listening-status-tag">Listening status tag</label>
@@ -183,6 +182,18 @@
             <option value="track">Track</option>
             <option value="game">Game</option>
             <option value="playlist">Playlist</option>
+          </select>
+        </div>
+        <div class="setting-row" style="border-top: 1px solid #f0f0f0">
+          <div class="setting-info">
+            <label for="status-label-placement">Nintendo Music on status tag</label>
+            <p>Choose where "Nintendo Music" appears in your Discord status — left, right, hidden, or shown on its own.</p>
+          </div>
+          <select class="setting-select" id="status-label-placement">
+            <option value="own">Own</option>
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+            <option value="hidden">Hidden</option>
           </select>
         </div>
       </div>
@@ -198,12 +209,14 @@
       const smallRpcImageEl = document.getElementById('small-rpc-image');
       const smallSubtextEl = document.getElementById('small-subtext');
       const listeningStatusTagEl = document.getElementById('listening-status-tag');
+      const statusLabelPlacementEl = document.getElementById('status-nm-form');
 
       function render(data) {
         splatoonDetailEl.checked = data.splatoonDetailedRpc;
         largeRpcImageEl.value = data.largeRpcImage ?? 'track';
         smallRpcImageEl.value = data.smallRpcImage ?? 'game';
         listeningStatusTagEl.value = data.listeningStatusTag ?? 'track';
+        statusLabelPlacementEl.value = data.statusLabelPlacement;
       }
 
       prefsApi.getAll().then(render);
@@ -239,6 +252,10 @@
 
       listeningStatusTagEl.addEventListener('change', () => {
         prefsApi.set('listeningStatusTag', listeningStatusTagEl.value);
+       });
+
+      statusLabelPlacementEl.addEventListener('change', () => {
+        prefsApi.set('statusLabelPlacement', statusLabelPlacementEl.value);
        });
     </script>
   </body>
