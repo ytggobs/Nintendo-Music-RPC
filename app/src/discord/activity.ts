@@ -1,4 +1,4 @@
-import { Track, DiscordActivity, DiscordActivityButton, RpcImageSource, SPLATOON_GAME_ID, SPLATOON_2_GAME_ID, SPLATOON_3_GAME_ID, ListeningStatusTag } from '../types';
+import { Track, DiscordActivity, DiscordActivityButton, RpcImageSource, SPLATOON_GAME_ID, SPLATOON_2_GAME_ID, SPLATOON_3_GAME_ID, ListeningStatusTag, StatusNmForm } from '../types';
 import { createLogger } from '../utils/logger';
 
 const { log } = createLogger('activity');
@@ -11,6 +11,7 @@ export interface ActivityOptions {
   largeRpcImage: RpcImageSource;
   smallRpcImage: RpcImageSource;
   listeningStatusTag: ListeningStatusTag;
+  statusNmForm: StatusNmForm;
 }
 
 function resolveImageUrl(source: RpcImageSource, track: Track): string | null {
@@ -63,9 +64,21 @@ export function buildActivity(track: Track, opts: ActivityOptions): DiscordActiv
     statusTagLabel = resolveListeningStatusTag(opts.listeningStatusTag, track) ?? details;
     log('Using standard format.', { details, state, isSplatoon });
   }
-
+  let formedName: string | undefined = undefined;
+  if (opts.statusNmForm === "only") {
+    formedName = "Nintendo Music";
+      }
+  if (opts.statusNmForm === "none") {
+    formedName = `${truncate(statusTagLabel)}`;
+  }
+  if (opts.statusNmForm === "left") {
+    formedName = `Nintendo Music - ${truncate(statusTagLabel)}`;
+  }
+  if (opts.statusNmForm === "right") {
+    formedName = `${statusTagLabel} - Nintendo Music`;
+  }
   const activity: DiscordActivity = {
-    name: `Nintendo Music - ${truncate(statusTagLabel)}`,
+    name: formedName,
     details: details,
     state: state,
     type: 2,
