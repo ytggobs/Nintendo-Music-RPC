@@ -1,4 +1,4 @@
-import { Track, DiscordActivity, DiscordActivityButton, RpcImageSource, SPLATOON_GAME_ID, SPLATOON_2_GAME_ID, SPLATOON_3_GAME_ID, ListeningStatusTag, StatusNmForm } from '../types';
+import { Track, DiscordActivity, DiscordActivityButton, RpcImageSource, SPLATOON_GAME_ID, SPLATOON_2_GAME_ID, SPLATOON_3_GAME_ID, ListeningStatusTag, StatusLabelPlacement } from '../types';
 import { createLogger } from '../utils/logger';
 
 const { log } = createLogger('activity');
@@ -11,7 +11,7 @@ export interface ActivityOptions {
   largeRpcImage: RpcImageSource;
   smallRpcImage: RpcImageSource;
   listeningStatusTag: ListeningStatusTag;
-  statusNmForm: StatusNmForm;
+  statusLabelPlacement: StatusLabelPlacement;
 }
 
 function resolveImageUrl(source: RpcImageSource, track: Track): string | null {
@@ -65,17 +65,17 @@ export function buildActivity(track: Track, opts: ActivityOptions): DiscordActiv
     log('Using standard format.', { details, state, isSplatoon });
   }
   let formedName: string | undefined = undefined;
-  switch (opts.statusNmForm) {
-    case StatusNmForm.Only:
+  switch (opts.statusLabelPlacement) {
+    case StatusLabelPlacement.Only:
       formedName = "Nintendo Music";
       break;
-    case StatusNmForm.None:
+    case StatusLabelPlacement.None:
       formedName = `${truncate(statusTagLabel)}`;
       break;
-    case StatusNmForm.Left:
+    case StatusLabelPlacement.Left:
       formedName = `Nintendo Music - ${truncate(statusTagLabel)}`;
       break;
-    case StatusNmForm.Right:
+    case StatusLabelPlacement.Right:
       formedName = `${statusTagLabel} - Nintendo Music`;
       break;
     default:
